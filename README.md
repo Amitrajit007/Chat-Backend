@@ -51,7 +51,7 @@ Client disconnect with id:  N53Z4u-jdDrcADl0AAAD
 1. socket.id is a temporary identifier assigned per connection, used here only for debugging/logging.
 
 ## File structure
-
+```
 ├── README.md
 ├── client
 └── server
@@ -65,3 +65,4 @@ Client disconnect with id:  N53Z4u-jdDrcADl0AAAD
     │   └── index.ts
     ├── tsconfig.json
     └── update
+```
