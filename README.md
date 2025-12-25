@@ -63,17 +63,22 @@ Client disconnect with id:  N53Z4u-jdDrcADl0AAAD
 
 ## File structure
 ```
+.
 ├── README.md
 ├── client
 └── server
     ├── controller
-    ├── node_modules
     ├── package-lock.json
     ├── package.json
     ├── routes
     ├── src
-    │   ├── client-test.ts
-    │   └── index.ts
+    │   ├── index.ts
+    │   └── types
+    │       └── socket.ts
+    ├── test
+    │   ├── client-test-1.ts
+    │   └── client-test-2.ts
     ├── tsconfig.json
     └── update
+        └── update-13thNov25.md
 ```
