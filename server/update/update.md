@@ -9,3 +9,7 @@ have to update the routes
 2. cannot validate if a DM target exists
 
 3. cannot auto-route properly
+
+- next-
+
+add msg customizing capability + clean up (server)
