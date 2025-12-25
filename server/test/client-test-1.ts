@@ -12,6 +12,10 @@ socket.on("connect", () => {
   socket.emit("dm-message", "Hello World! from Dummy-1");
 });
 
+socket.on("online-users", (users: string[]) => {
+  console.log("online:", users);
+});
+
 socket.on("dm-message", (message: ChatMessage) => {
   console.log(`${message.from} : ${message.text}`);
 });

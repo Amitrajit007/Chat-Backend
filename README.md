@@ -45,17 +45,37 @@ io.on('connection', (socket) => {
 ```bash
 Listening at 5000
 
-a user connected:  3gUsuPqzb6o63WudAAAB
-message recieved:  Hello World! from dummy 1 
+Online :  [ 'Dummy-2' ]
+Dummy-2 is connected in romm : dm:Dummy-1_Dummy-2
 
-a user connected:  N53Z4u-jdDrcADl0AAAD
-message recieved:  Hello World! from dummy 1 
+Online :  [ 'Dummy-2', 'Dummy-1' ]
 
-a user connected:  hBpYBRyp8zYVt5gSAAAF
-message recieved:  Hello World! from dummy 1 
+Dummy-1 is connected in romm : dm:Dummy-1_Dummy-2
+Client disconnect with id:  xieMTdeuIao3XKnDAAAB
 
-Client disconnect with id:  N53Z4u-jdDrcADl0AAAD
+Online :  [ 'Dummy-1' ]
+
+Online :  [ 'Dummy-1', 'Dummy-2' ]
+
+Dummy-2 is connected in romm : dm:Dummy-1_Dummy-2
 ```
+## Dummy-1 console:
+```bash
+Dummy-1 : Hello World! from Dummy-1
+
+online: [ 'Dummy-1' ]
+
+online: [ 'Dummy-1', 'Dummy-2' ]
+
+Dummy-2 : hello from Dummy-2
+```
+## Dummy-2 console:
+```bash
+online: [ 'Dummy-1', 'Dummy-2' ]
+
+Dummy-2 : hello from Dummy-2
+```
+
 
 ## N.B.
 
@@ -80,5 +100,5 @@ Client disconnect with id:  N53Z4u-jdDrcADl0AAAD
     │   └── client-test-2.ts
     ├── tsconfig.json
     └── update
-        └── update-13thNov25.md
+        └── update.md
 ```

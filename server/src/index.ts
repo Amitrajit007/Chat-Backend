@@ -8,6 +8,8 @@ import express, { Request, Response } from "express";
 import { Server, Socket } from "socket.io";
 import { createServer } from "node:http";
 import cors from "cors";
+import { AxiosRequestTransformer } from "axios";
+import { on } from "node:process";
 
 // ENVs
 const PORT = process.env.PORT || 5000;
@@ -30,18 +32,26 @@ app.get("/health", (req: Request, res: Response) => {
   res.send("OK");
 });
 
-// dm room logic
+// dm room name
 
 function dmRoom(userA: string, userB: string) {
   return `dm:${[userA, userB].sort().join("_")}`;
 }
 
+const onlineUser = new Map<string, string>(); // username -> socket.id
+
 io.on("connection", (socket: Socket) => {
   // adding username to the connections @ sockect.on("set-username")
   socket.on("set-username", (username: string) => {
     socket.data.username = username;
-  });
+    // adding the name and the sockect id to the Map
+    onlineUser.set(username, socket.id);
 
+    io.emit("online-users", [...onlineUser.keys()]);
+
+    console.log("Online : ", [...onlineUser.keys()]);
+  });
+  //creating the
   // now adding the room with unique names
 
   socket.on("start-dm", (target: string) => {
@@ -76,6 +86,9 @@ io.on("connection", (socket: Socket) => {
   // when client disconnects
   socket.on("disconnect", () => {
     console.log("Client disconnect with id: ", socket.id);
+    onlineUser.delete(socket.data.username);
+    console.log("Online : ", [...onlineUser.keys()]);
+    io.emit("online-users", [...onlineUser.keys()]);
   });
 });
 
