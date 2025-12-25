@@ -3,10 +3,21 @@
 
 ## Model:
 
+1. Fundamental structure
+
 ```mathematica
 Socket.IO Client (User A)  ─┐
                             ├─>  Your Backend  ──>  Socket.IO Client (User B)
 Socket.IO Client (User C)  ─┘
+```
+
+2. Working structure 
+
+```mathematica
+Client A
+  └─ emit("chat-message")  → Backend
+                               └─ io.emit("chat-message") → Client A + Client B
+                                                                  └─ on("chat-message") logs it
 ```
 
 ## Work Flow: 

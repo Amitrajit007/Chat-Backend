@@ -1,4 +1,8 @@
 import "dotenv/config";
+// types
+
+import type { ChatMessage } from "./types/socket";
+
 // imports
 import express, { Request, Response } from "express";
 import { Server, Socket } from "socket.io";
@@ -27,15 +31,31 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 io.on("connection", (socket: Socket) => {
+  // adding username to the connections @ sockect.on("set-username")
+  socket.on("set-username", (username: string) => {
+    socket.data.username = username;
+    console.log(`Client connected : ${username}`);
+  });
+
   console.log("a user connected: ", socket.id);
 
   socket.on("chat-message", (text: string) => {
     console.log("message recieved: ", text);
 
-    //sending the msg to all others
-    socket.broadcast.emit("chat-message", text);
+    //sending the msg to all others except the sender
+    // socket.broadcast.emit("chat-message", text);
+
+    // creating the complete object for the msg to display
+    const message: ChatMessage = {
+      from: socket.data.username ?? "Anonymous",
+      text,
+    };
+
+    // sending the msg to all including the sender
+    io.emit("chat-message", message);
   });
 
+  // when client disconnects
   socket.on("disconnect", () => {
     console.log("Client disconnect with id: ", socket.id);
   });
