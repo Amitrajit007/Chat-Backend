@@ -30,17 +30,35 @@ app.get("/health", (req: Request, res: Response) => {
   res.send("OK");
 });
 
+// dm room logic
+
+function dmRoom(userA: string, userB: string) {
+  return `dm:${[userA, userB].sort().join("_")}`;
+}
+
 io.on("connection", (socket: Socket) => {
   // adding username to the connections @ sockect.on("set-username")
   socket.on("set-username", (username: string) => {
     socket.data.username = username;
-    console.log(`Client connected : ${username}`);
   });
 
-  console.log("a user connected: ", socket.id);
+  // now adding the room with unique names
 
-  socket.on("chat-message", (text: string) => {
-    console.log("message recieved: ", text);
+  socket.on("start-dm", (target: string) => {
+    const myUsername: string = socket.data.username;
+    if (!myUsername) return;
+
+    const room = dmRoom(myUsername, target);
+    socket.join(room);
+    socket.data.currentRoom = room;
+
+    console.log(`${myUsername} is connected in romm : ${room}`);
+  });
+  // console.log("a user connected: ", socket.id);
+
+  socket.on("dm-message", (text: string) => {
+    const room = socket.data.currentRoom;
+    if (!room) return;
 
     //sending the msg to all others except the sender
     // socket.broadcast.emit("chat-message", text);
@@ -52,7 +70,7 @@ io.on("connection", (socket: Socket) => {
     };
 
     // sending the msg to all including the sender
-    io.emit("chat-message", message);
+    io.to(room).emit("dm-message", message);
   });
 
   // when client disconnects

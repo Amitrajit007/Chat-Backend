@@ -6,12 +6,13 @@ const socket = io("http://localhost:5000");
 
 socket.on("connect", () => {
   socket.emit("set-username", "Dummy-1");
-
+  // connecting at the room
+  socket.emit("start-dm", "Dummy-2");
   // sending a msg :
-  socket.emit("chat-message", "Hello World! 👋 ");
+  socket.emit("dm-message", "Hello World! from Dummy-1");
 });
 
-socket.on("chat-message", (message: ChatMessage) => {
+socket.on("dm-message", (message: ChatMessage) => {
   console.log(`${message.from} : ${message.text}`);
 });
 
