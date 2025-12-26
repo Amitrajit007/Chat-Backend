@@ -71,13 +71,29 @@ io.on("connection", (socket: Socket) => {
     const room = socket.data.currentRoom;
     if (!room) return;
 
+    // VALIDATION -
+
+    if (
+      text.toLocaleLowerCase().includes("war") ||
+      text.toLocaleLowerCase().includes("hello")
+    ) {
+      const text: string = "Message is not accepted";
+      const message: ChatMessage = {
+        from: socket.data.username,
+        text,
+      };
+      io.to(room).emit("dm-error", message);
+      return;
+    }
     //sending the msg to all others except the sender
     // socket.broadcast.emit("chat-message", text);
 
     // creating the complete object for the msg to display
     const message: ChatMessage = {
+      id: socket.id,
       from: socket.data.username ?? "Anonymous",
       text,
+      
     };
 
     // sending the msg to all including the sender

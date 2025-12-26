@@ -63,7 +63,7 @@ No one is Online
 ```bash
 online: [ 'Dummy-1' ]
 
-Dummy-1 : Hello World! from Dummy-1  
+You : Hello World! from Dummy-1  
 
 online: [ 'Dummy-1', 'Dummy-2' ]
 
@@ -77,7 +77,7 @@ Disconnected.
 ```bash
 online: [ 'Dummy-1', 'Dummy-2' ]
 
-Dummy-2 : hello from Dummy-2
+You : Message is not accepted
 
 Disconnected.
 ```
