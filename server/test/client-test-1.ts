@@ -21,5 +21,5 @@ socket.on("dm-message", (message: ChatMessage) => {
 });
 
 socket.on("disconnect", () => {
-  console.log("Disconnected !");
+  console.log("Disconnected. ");
 });

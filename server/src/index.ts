@@ -48,8 +48,9 @@ io.on("connection", (socket: Socket) => {
     onlineUser.set(username, socket.id);
 
     io.emit("online-users", [...onlineUser.keys()]);
-
-    console.log("Online : ", [...onlineUser.keys()]);
+    if ([...onlineUser.keys()].length !== 0) {
+      console.log("Online : ", [...onlineUser.keys()]);
+    }
   });
   //creating the
   // now adding the room with unique names
@@ -87,7 +88,11 @@ io.on("connection", (socket: Socket) => {
   socket.on("disconnect", () => {
     console.log("Client disconnect with id: ", socket.id);
     onlineUser.delete(socket.data.username);
-    console.log("Online : ", [...onlineUser.keys()]);
+    if ([...onlineUser.keys()].length === 0) {
+      console.log("No one is Online");
+    } else {
+      console.log("Online : ", [...onlineUser.keys()]);
+    }
     io.emit("online-users", [...onlineUser.keys()]);
   });
 });

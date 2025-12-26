@@ -13,3 +13,5 @@ have to update the routes
 - next-
 
 add msg customizing capability + clean up (server)
+
+in backend add a boundary condition for : " Online :  [] "

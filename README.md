@@ -44,36 +44,42 @@ io.on('connection', (socket) => {
 ## Backend console:
 ```bash
 Listening at 5000
-
-Online :  [ 'Dummy-2' ]
-Dummy-2 is connected in romm : dm:Dummy-1_Dummy-2
-
-Online :  [ 'Dummy-2', 'Dummy-1' ]
+Online :  [ 'Dummy-1' ]
 
 Dummy-1 is connected in romm : dm:Dummy-1_Dummy-2
-Client disconnect with id:  xieMTdeuIao3XKnDAAAB
-
-Online :  [ 'Dummy-1' ]
 
 Online :  [ 'Dummy-1', 'Dummy-2' ]
 
 Dummy-2 is connected in romm : dm:Dummy-1_Dummy-2
+Client disconnect with id:  z9WzkUGusKb34sPoAAAB
+
+Online :  [ 'Dummy-2' ]
+
+Client disconnect with id:  nC_ruxh2t6tDAIWrAAAD
+
+No one is Online
 ```
 ## Dummy-1 console:
 ```bash
-Dummy-1 : Hello World! from Dummy-1
-
 online: [ 'Dummy-1' ]
+
+Dummy-1 : Hello World! from Dummy-1  
 
 online: [ 'Dummy-1', 'Dummy-2' ]
 
 Dummy-2 : hello from Dummy-2
+
+online: [ 'Dummy-1']
+
+Disconnected.
 ```
 ## Dummy-2 console:
 ```bash
 online: [ 'Dummy-1', 'Dummy-2' ]
 
 Dummy-2 : hello from Dummy-2
+
+Disconnected.
 ```
 
 
