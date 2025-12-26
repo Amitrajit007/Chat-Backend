@@ -3,7 +3,7 @@ have to update the routes
 # at 26th dec
 
 - complete the basic websocket handshakes
-- yet
+- not yet -- done
 1. does NOT know who is online -  done
 
 2. cannot validate if a DM target exists -  done

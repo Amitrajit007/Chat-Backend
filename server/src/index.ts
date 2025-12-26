@@ -2,14 +2,15 @@ import "dotenv/config";
 // types
 
 import type { ChatMessage } from "./types/socket";
+import { now } from "../utils/time";
+
+console.log(now());
 
 // imports
 import express, { Request, Response } from "express";
 import { Server, Socket } from "socket.io";
 import { createServer } from "node:http";
 import cors from "cors";
-import { AxiosRequestTransformer } from "axios";
-import { on } from "node:process";
 
 // ENVs
 const PORT = process.env.PORT || 5000;
@@ -79,8 +80,10 @@ io.on("connection", (socket: Socket) => {
     ) {
       const text: string = "Message is not accepted";
       const message: ChatMessage = {
+        id: socket.id,
         from: socket.data.username,
         text,
+        time: now(),
       };
       io.to(room).emit("dm-error", message);
       return;
@@ -93,7 +96,7 @@ io.on("connection", (socket: Socket) => {
       id: socket.id,
       from: socket.data.username ?? "Anonymous",
       text,
-      
+      time: now(),
     };
 
     // sending the msg to all including the sender

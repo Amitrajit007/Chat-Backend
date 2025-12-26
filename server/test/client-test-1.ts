@@ -20,14 +20,16 @@ socket.on("online-users", (users: string[]) => {
 
 socket.on("dm-message", (message: ChatMessage) => {
   const sender = message.from === myUserName ? "You" : message.from;
-  console.log(`${sender} : ${message.text}`);
+  console.log(
+    `(ID : ${message.id}) ${sender} : ${message.text} at ${message.time} `,
+  );
 });
 
 // handling the error event
 
 socket.on("dm-error", (msg: ChatMessage) => {
   const sender = msg.from === myUserName ? "You" : msg.from;
-  console.log(`${sender} : ${msg.text}`);
+  console.log(`(ID : ${msg.id}) ${sender} : ${msg.text} at ${msg.time} `);
 });
 
 socket.on("disconnect", () => {
