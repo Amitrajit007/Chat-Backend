@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 import { ChatMessage } from "../types/socket";
 
-const msgSchema = new Schema<ChatMessage>({
+const msgSchema = new Schema({
   roomId: {
     type: String,
     required: true,
@@ -11,7 +11,6 @@ const msgSchema = new Schema<ChatMessage>({
     type: String,
     required: true,
   },
-
   from: {
     type: String,
     required: true,
@@ -20,10 +19,16 @@ const msgSchema = new Schema<ChatMessage>({
     type: String,
     required: true,
   },
+  to: {
+    type: String,
+    required: true,
+  },
   time: {
     type: String,
     required: true,
   },
 });
+
+msgSchema.index({ roomId: 1, createdAt: -1 });
 
 export const MessageModel = mongoose.model<ChatMessage>("Message", msgSchema);

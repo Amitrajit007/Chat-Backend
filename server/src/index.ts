@@ -2,8 +2,10 @@ import "dotenv/config";
 // types
 
 import type { ChatMessage } from "./types/socket";
-import { now } from "./utils/time";
 
+// import utils
+import { now } from "./utils/time";
+import { roomId } from "./utils/roomId";
 // imports
 import express, { Request, Response } from "express";
 import { Server, Socket } from "socket.io";
@@ -78,6 +80,7 @@ io.on("connection", (socket: Socket) => {
 
   socket.on("start-dm", (target: string) => {
     const myUsername: string = socket.data.username;
+    socket.data.target = target;
     if (!myUsername) return;
 
     const room = dmRoom(myUsername, target);
@@ -100,6 +103,7 @@ io.on("connection", (socket: Socket) => {
     ) {
       const text: string = "Message is not accepted";
       const message: ChatMessage = {
+        roomId: roomId(socket.data.username, socket.data.target),
         id: socket.id,
         from: socket.data.username,
         text,
@@ -113,6 +117,7 @@ io.on("connection", (socket: Socket) => {
 
     // creating the complete object for the msg to display
     const message: ChatMessage = {
+      roomId: roomId(socket.data.username, socket.data.target),
       id: socket.id,
       from: socket.data.username ?? "Anonymous",
       text,
@@ -121,7 +126,14 @@ io.on("connection", (socket: Socket) => {
 
     // sending the msg to all including the sender
     io.to(room).emit("dm-message", message);
-    await MessageModel.create(message);
+    await MessageModel.create({
+      roomId: roomId(socket.data.username, socket.data.target),
+      id: socket.id,
+      from: socket.data.username ?? "Anonymous",
+      text,
+      to: socket.data.target,
+      time: now(),
+    });
   });
 
   // when client disconnects

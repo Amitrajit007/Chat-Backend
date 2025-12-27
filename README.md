@@ -108,3 +108,17 @@ Disconnected.
     └── update
         └── update.md
 ```
+
+## DataBase schema: example 
+
+```json
+{
+  "roomId": "Dummy-3,Dummy-4",
+  "id": "jxKCSoWK6t4p8vojAAAD",
+  "from": "Dummy-4",
+  "text": "I believe in peace! from Dummy-4",
+  "to": "Dummy-3",
+  "time": "28/12/2025, 2:45:46 am",
+  "__v": 0
+}
+```
