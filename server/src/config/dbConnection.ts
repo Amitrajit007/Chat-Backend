@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const uri = process.env.Atlas_URI;
 
-if (!uri) {
-  throw new Error("Atlas_url is not defined");
-}
-
 export async function connectDb(): Promise<void> {
   // function name () : Promise<void> means it will return nothing
+  //
+  if (!uri) {
+    throw new Error("Atlas_URI is not defined");
+  }
   try {
     await mongoose.connect(uri);
     console.log("MongoDB connected successfully");

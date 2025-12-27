@@ -20,3 +20,10 @@ startting clean up --
 
 
 may be can use "Zod" for stricter run time validation
+
+
+-- complete the db connection from the entry point .
+
+--- got Auth Error in config :
+happens due to : await mongoose.connect(uri);
+-- username and password corrected in the URI of Atlas

@@ -2,15 +2,19 @@ import "dotenv/config";
 // types
 
 import type { ChatMessage } from "./types/socket";
-import { now } from "../utils/time";
-
-console.log(now());
+import { now } from "./utils/time";
 
 // imports
 import express, { Request, Response } from "express";
 import { Server, Socket } from "socket.io";
 import { createServer } from "node:http";
 import cors from "cors";
+
+// for data base connection
+import { connectDb } from "./config/dbConnection";
+
+// for data base models.
+import { MessageModel } from "./model/chat";
 
 // ENVs
 const PORT = process.env.PORT || 5000;
@@ -20,15 +24,33 @@ const app = express(); //request handler
 const server = createServer(app); //real HTTP server
 const io = new Server(server); //WebSocket layer attached to that server
 
+const onlineUser = new Map<string, string>(); // username -> socket.id
+
 // middlewares
 app.use(express.json());
 app.use(cors());
 
-// basic routes for sanity now
+// connecting with tha database
+async function bootstrap() {
+  try {
+    await connectDb();
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error("startup failed with : ", err.message);
+    } else {
+      console.error("startup failed with : ", err);
+    }
+    process.exit(1); // crash fast
+  }
+}
+bootstrap();
+
+// starting route
 app.get("/", (req: Request, res: Response) => {
   res.json({ msg: `Active @ ${PORT}` });
 });
 
+// health -online check
 app.get("/health", (req: Request, res: Response) => {
   res.send("OK");
 });
@@ -38,8 +60,6 @@ app.get("/health", (req: Request, res: Response) => {
 function dmRoom(userA: string, userB: string) {
   return `dm:${[userA, userB].sort().join("_")}`;
 }
-
-const onlineUser = new Map<string, string>(); // username -> socket.id
 
 io.on("connection", (socket: Socket) => {
   // adding username to the connections @ sockect.on("set-username")
@@ -67,8 +87,8 @@ io.on("connection", (socket: Socket) => {
     console.log(`${myUsername} is connected in romm : ${room}`);
   });
   // console.log("a user connected: ", socket.id);
-
-  socket.on("dm-message", (text: string) => {
+  // Backend -->  Client
+  socket.on("dm-message", async (text: string) => {
     const room = socket.data.currentRoom;
     if (!room) return;
 
@@ -101,6 +121,7 @@ io.on("connection", (socket: Socket) => {
 
     // sending the msg to all including the sender
     io.to(room).emit("dm-message", message);
+    await MessageModel.create(message);
   });
 
   // when client disconnects

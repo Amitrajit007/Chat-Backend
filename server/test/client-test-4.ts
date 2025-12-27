@@ -3,17 +3,15 @@ import { ChatMessage } from "../src/types/socket";
 import { io } from "socket.io-client";
 
 const socket = io("http://localhost:5000");
-
 let myUserName: string = "Anonymous";
 
 socket.on("connect", () => {
-  socket.emit("set-username", "Dummy-2");
-  // console.log("connected with ID : ", socket.id); however this is so much unpredictable to create any dm room or any kind of room.
-  myUserName = "Dummy-2";
-  // connecting to the other user
-  socket.emit("start-dm", "Dummy-1");
+  socket.emit("set-username", "Dummy-4");
+  myUserName = "Dummy-4";
+  // connecting at the room
+  socket.emit("start-dm", "Dummy-3");
   // sending a msg :
-  socket.emit("dm-message", `hello from ${myUserName}`);
+  socket.emit("dm-message", "I believe in peace! from Dummy-4");
 });
 
 socket.on("online-users", (users: string[]) => {
@@ -27,11 +25,13 @@ socket.on("dm-message", (message: ChatMessage) => {
   );
 });
 
+// handling the error event
+
 socket.on("dm-error", (msg: ChatMessage) => {
   const sender = msg.from === myUserName ? "You" : msg.from;
   console.log(`(ID : ${msg.id}) ${sender} : ${msg.text} at ${msg.time} `);
 });
 
 socket.on("disconnect", () => {
-  console.log("Disconnected.");
+  console.log("Disconnected. ");
 });
