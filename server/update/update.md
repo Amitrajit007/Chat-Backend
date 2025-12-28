@@ -27,3 +27,15 @@ may be can use "Zod" for stricter run time validation
 --- got Auth Error in config :
 happens due to : await mongoose.connect(uri);
 -- username and password corrected in the URI of Atlas
+
+TODO: 
+add ---
+1. CLI chat client
+
+2. Rate limiting / spam protection
+
+3. Typing indicators
+
+4. Read receipts
+
+5. Auth (JWT) ← only after all above

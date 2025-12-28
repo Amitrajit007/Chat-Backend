@@ -122,3 +122,43 @@ Disconnected.
   "__v": 0
 }
 ```
+
+
+## Chat history :
+
+# End point 
+
+GET:
+
+```
+http://localhost:5000/lastmessages?from=Dummy-3&to=Dummy-4&limit=5
+```
+
+# DataBase structure:
+
+```json
+{
+    "messages": [
+        {
+            "_id": "69504c825064e368c4dae44a",
+            "roomId": "Dummy-3,Dummy-4",
+            "id": "jxKCSoWK6t4p8vojAAAD",
+            "from": "Dummy-4",
+            "text": "I believe in peace! from Dummy-4",
+            "to": "Dummy-3",
+            "time": "28/12/2025, 2:45:46 am",
+            "__v": 0
+        },
+        {
+            "_id": "69504c815064e368c4dae446",
+            "roomId": "Dummy-3,Dummy-4",
+            "id": "t9iOkd-d9NTVirfnAAAB",
+            "from": "Dummy-3",
+            "text": "Good morinig! from Dummy-3",
+            "to": "Dummy-4",
+            "time": "28/12/2025, 2:45:45 am",
+            "__v": 0
+        }
+    ]
+}
+```
