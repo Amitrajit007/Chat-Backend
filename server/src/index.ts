@@ -17,6 +17,7 @@ import { connectDb } from "./config/dbConnection";
 
 // for data base models.
 import { MessageModel } from "./model/chat";
+import { send } from "node:process";
 
 // ENVs
 const PORT = process.env.PORT || 5000;
@@ -31,6 +32,7 @@ const onlineUser = new Map<string, string>(); // username -> socket.id
 // middlewares
 app.use(express.json());
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 
 // connecting with tha database
 async function bootstrap() {
@@ -57,6 +59,36 @@ app.get("/health", (req: Request, res: Response) => {
   res.send("OK");
 });
 
+// route for showing the last messages from the database
+app.get("/lastmessages", async (req: Request, res: Response) => {
+  try {
+    const { from, to, limit = "10" } = req.query;
+
+    if (!from || !to) {
+      return res.status(400).json({ error: "from and to are required" });
+    }
+
+    const room: string = roomId(String(from), String(to)); // getting the roomId
+    const msgLimit = Math.min(Number(limit), 25);
+
+    const messages = await MessageModel.find({ roomId: room })
+      .sort({ createdAt: -1 })
+      .limit(msgLimit)
+      .lean();
+
+    messages.reverse();
+
+    res.status(200).json({
+      messages, // raw json
+    });
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log("Error while showing last messages : ", err.message);
+    } else {
+      console.log("Error while showing last messages : ", err);
+    }
+  }
+});
 // dm room name
 
 function dmRoom(userA: string, userB: string) {
