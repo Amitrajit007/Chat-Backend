@@ -42,3 +42,5 @@ TODO: -
 4. Read receipts
 
 5. Auth (JWT) ← only after all above
+
+try to add the type from the cjs to ESM
