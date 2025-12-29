@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-import { ChatMessage } from "../types/socket";
+import { ChatMessage } from "../../../packages/shared/src/types/socket";
 
 const msgSchema = new Schema({
   roomId: {

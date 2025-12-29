@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const uri = process.env.Atlas_URI;
 
 export async function connectDb(): Promise<void> {
-  // function name () : Promise<void> means it will return nothing
+  // function name () : Promise<void> means it will return nothing only for async functions
   //
   if (!uri) {
     throw new Error("Atlas_URI is not defined");

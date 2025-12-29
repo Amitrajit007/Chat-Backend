@@ -1,7 +1,7 @@
 import "dotenv/config";
 // types
 
-import type { ChatMessage } from "./types/socket";
+import type { ChatMessage } from "../../packages/shared/dist";
 
 // import utils
 import { now } from "./utils/time";
@@ -17,7 +17,6 @@ import { connectDb } from "./config/dbConnection";
 
 // for data base models.
 import { MessageModel } from "./model/chat";
-import { send } from "node:process";
 
 // ENVs
 const PORT = process.env.PORT || 5000;
