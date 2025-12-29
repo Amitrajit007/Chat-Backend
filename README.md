@@ -92,21 +92,47 @@ Disconnected.
 .
 ├── README.md
 ├── client
-└── server
-    ├── controller
-    ├── package-lock.json
-    ├── package.json
-    ├── routes
-    ├── src
-    │   ├── index.ts
-    │   └── types
-    │       └── socket.ts
-    ├── test
-    │   ├── client-test-1.ts
-    │   └── client-test-2.ts
-    ├── tsconfig.json
-    └── update
-        └── update.md
+│   ├── cli.ts
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── test.ts
+│   └── tsconfig.json
+├── packages
+│   ├── package-lock.json
+│   ├── package.json
+│   └── shared
+│       ├── dist
+│       │   ├── index.d.ts
+│       │   └── types
+│       │       └── socket.d.ts
+│       ├── src
+│       │   ├── index.ts
+│       │   └── types
+│       │       └── socket.ts
+│       └── tsconfig.json
+├── server
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── .env
+│   ├── src
+│   │   ├── config
+│   │   │   └── dbConnection.ts
+│   │   ├── controller
+│   │   ├── index.ts
+│   │   ├── model
+│   │   │   └── chat.ts
+│   │   ├── routes
+│   │   ├── tsconfig.json
+│   │   └── utils
+│   │       ├── roomId.ts
+│   │       └── time.ts
+│   └── test
+│       ├── client-test-1.ts
+│       ├── client-test-2.ts
+│       ├── client-test-3.ts
+│       └── client-test-4.ts
+└── update
+    └── update.md
 ```
 
 ## DataBase schema: example 
