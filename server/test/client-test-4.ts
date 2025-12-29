@@ -1,4 +1,4 @@
-import { ChatMessage } from "../../packages/shared/src/types/socket";
+import { ChatMessage } from "../../packages/shared/dist";
 
 import { io } from "socket.io-client";
 

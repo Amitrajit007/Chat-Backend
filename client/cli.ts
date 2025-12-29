@@ -1,12 +1,12 @@
 import { io } from "socket.io-client";
 import readline from "readline";
 
-import {}
+import type { ChatMessage } from "../packages/shared/dist";
 
 const socket = io("http://localhost:5000");
 
-const USERNAME = process.argv[2];
-const TARGET = process.argv[3];
+const USERNAME = process.argv[2].toLocaleLowerCase();
+const TARGET = process.argv[3].toLocaleLowerCase();
 // connection error
 socket.on("connect_error", (err) => {
   console.log("Connection failed:", err.message);
@@ -37,7 +37,27 @@ cli.on("line", (line: string) => {
 
 socket.on("dm-message", (message: ChatMessage) => {
   const sender = message.from === USERNAME ? "You" : message.from;
-  console.log(
-    `(ID : ${message.id}) ${sender} : ${message.text} at ${message.time} `,
-  );
+  console.log(`${sender} : ${message.text}          ${message.time} `);
+});
+
+// handle errors
+socket.on("dm-error", (err) => {
+  console.log("Error:", err);
+});
+
+// cleanup
+socket.on("disconnect", () => {
+  console.log("Disconnected");
+  process.exit(0);
+});
+
+cli.on("SIGINT", () => {
+  console.log("\nCaught Ctrl+C");
+  cli.close();
+});
+
+cli.on("close", () => {
+  console.log("Closing connection...");
+  socket.disconnect();
+  process.exit(0);
 });

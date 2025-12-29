@@ -130,7 +130,7 @@ io.on("connection", (socket: Socket) => {
 
     if (
       text.toLocaleLowerCase().includes("war") ||
-      text.toLocaleLowerCase().includes("hello")
+      text.toLocaleLowerCase().includes("gun")
     ) {
       const text: string = "Message is not accepted";
       const message: ChatMessage = {

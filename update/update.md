@@ -30,7 +30,10 @@ happens due to : await mongoose.connect(uri);
 
 TODO: 
 add ---
-1. CLI chat client
+1. CLI chat client done 
+
+
+TODO: - 
 
 2. Rate limiting / spam protection
 
