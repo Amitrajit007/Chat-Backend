@@ -87,7 +87,7 @@ Disconnected.
 
 1. socket.id is a temporary identifier assigned per connection, used here only for debugging/logging.
 
-## File structure
+## Folder structure
 ```
 .
 ├── README.md

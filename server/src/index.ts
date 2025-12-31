@@ -95,6 +95,12 @@ function dmRoom(userA: string, userB: string) {
 }
 
 io.on("connection", (socket: Socket) => {
+  // data
+  socket.data.rate = {
+    count: 0,
+    lastReset: Date.now(),
+    mutedUntil: 0,
+  };
   // adding username to the connections @ sockect.on("set-username")
   socket.on("set-username", (username: string) => {
     socket.data.username = username;
@@ -124,7 +130,25 @@ io.on("connection", (socket: Socket) => {
   // Backend -->  Client
   socket.on("dm-message", async (text: string) => {
     const room = socket.data.currentRoom;
-    if (!room) return;
+    const NOW = Date.now();
+    const rate = socket.data.rate;
+    if (NOW < rate.mutedUntil) {
+      socket.emit("dm-error", "You are temporarily muted");
+      return;
+    }
+
+    if (NOW - rate.lastReset > 60_000) {
+      rate.count = 0;
+      rate.lastReset = NOW;
+    }
+
+    rate.count++;
+
+    if (rate.count > 3) {
+      rate.mutedUntil = NOW + 5000; // 5 sec mute
+      socket.emit("dm-error", "Too many messages. Muted for 5s.");
+      return;
+    }
 
     // VALIDATION -
 
