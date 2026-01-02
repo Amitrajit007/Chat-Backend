@@ -49,7 +49,6 @@ export function registerDmMessage(io: Server, socket: Socket) {
     //sending the msg to all others except the sender
     // socket.broadcast.emit("chat-message", text);
 
-    // creating the complete object for the msg to display
     const message: ChatMessage = {
       roomId: roomId(socket.data.username, socket.data.target),
       id: socket.id,
