@@ -13,7 +13,7 @@ export function registerSocketHandler(io: Server, socket: Socket) {
     mutedUntil: 0,
   };
   registerSetUsername(io, socket);
-  registerDmMessage(io, socket);
   registerStartDm(io, socket);
+  registerDmMessage(io, socket);
   registerDisconnect(io, socket);
 }

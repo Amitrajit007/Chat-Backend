@@ -1,11 +1,5 @@
 import "dotenv/config";
-// types
 
-import type { ChatMessage } from "../../packages/shared/dist";
-
-// import utils
-import { now } from "./utils/time";
-import { roomId } from "./utils/roomId";
 // imports
 import { registerSocketHandler } from "./sockets/index";
 import express, { Request, Response } from "express";
@@ -58,148 +52,11 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 // route for showing the last messages from the database
-app.get("/lastmessages", async (req: Request, res: Response) => {
-  try {
-    const { from, to, limit = "10" } = req.query;
-
-    if (!from || !to) {
-      return res.status(400).json({ error: "from and to are required" });
-    }
-
-    const room: string = roomId(String(from), String(to)); // getting the roomId
-    const msgLimit = Math.min(Number(limit), 25);
-
-    const messages = await MessageModel.find({ roomId: room })
-      .sort({ createdAt: -1 })
-      .limit(msgLimit)
-      .lean();
-
-    messages.reverse();
-
-    res.status(200).json({
-      messages, // raw json
-    });
-  } catch (err) {
-    if (err instanceof Error) {
-      console.log("Error while showing last messages : ", err.message);
-    } else {
-      console.log("Error while showing last messages : ", err);
-    }
-  }
-});
+app.get("/lastmessages");
 // dm room name
-
-function dmRoom(userA: string, userB: string) {
-  return `dm:${[userA, userB].sort().join("_")}`;
-}
 
 io.on("connection", (socket: Socket) => {
   registerSocketHandler(io, socket);
-  // Socket.data.rate
-
-  // adding username to the connections @ sockect.on("set-username")
-  /*
-  socket.on("set-username", (username: string) => {
-    socket.data.username = username;
-    // adding the name and the sockect id to the Map
-    onlineUser.set(username, socket.id);
-
-    io.emit("online-users", [...onlineUser.keys()]);
-    if ([...onlineUser.keys()].length !== 0) {
-      console.log("Online : ", [...onlineUser.keys()]);
-    }
-  });
-  */
-  //creating the
-  // now adding the room with unique names
-
-  socket.on("start-dm", (target: string) => {
-    const myUsername: string = socket.data.username;
-    socket.data.target = target;
-    if (!myUsername) return;
-
-    const room = dmRoom(myUsername, target);
-    socket.join(room);
-    socket.data.currentRoom = room;
-
-    console.log(`${myUsername} is connected in romm : ${room}`);
-  });
-  // console.log("a user connected: ", socket.id);
-  // Backend -->  Client
-  socket.on("dm-message", async (text: string) => {
-    const room = socket.data.currentRoom;
-    const NOW = Date.now();
-    const rate = socket.data.rate;
-    if (NOW < rate.mutedUntil) {
-      socket.emit("dm-error", "You are temporarily muted");
-      return;
-    }
-
-    if (NOW - rate.lastReset > 60_000) {
-      rate.count = 0;
-      rate.lastReset = NOW;
-    }
-
-    rate.count++;
-
-    if (rate.count > 3) {
-      rate.mutedUntil = NOW + 5000; // 5 sec mute
-      socket.emit("dm-error", "Too many messages. Muted for 5s.");
-      return;
-    }
-
-    // VALIDATION -
-
-    if (
-      text.toLocaleLowerCase().includes("war") ||
-      text.toLocaleLowerCase().includes("gun")
-    ) {
-      const text: string = "Message is not accepted";
-      const message: ChatMessage = {
-        roomId: roomId(socket.data.username, socket.data.target),
-        id: socket.id,
-        from: socket.data.username,
-        text,
-        time: now(),
-      };
-      io.to(room).emit("dm-error", message);
-      return;
-    }
-    //sending the msg to all others except the sender
-    // socket.broadcast.emit("chat-message", text);
-
-    // creating the complete object for the msg to display
-    const message: ChatMessage = {
-      roomId: roomId(socket.data.username, socket.data.target),
-      id: socket.id,
-      from: socket.data.username ?? "Anonymous",
-      text,
-      time: now(),
-    };
-
-    // sending the msg to all including the sender
-    io.to(room).emit("dm-message", message);
-    await MessageModel.create({
-      roomId: roomId(socket.data.username, socket.data.target),
-      id: socket.id,
-      from: socket.data.username ?? "Anonymous",
-      text,
-      to: socket.data.target,
-      time: now(),
-    });
-  });
-
-  // when client disconnects
-  socket.on("disconnect", () => {
-    console.log("Client disconnect with id: ", socket.id);
-    onlineUser.delete(socket.data.username);
-    if ([...onlineUser.keys()].length === 0) {
-      console.log("No one is Online");
-    } else {
-      console.log("Online : ", [...onlineUser.keys()]);
-    }
-    io.emit("online-users", [...onlineUser.keys()]);
-  });
 });
 
 server.listen(PORT, () => {
