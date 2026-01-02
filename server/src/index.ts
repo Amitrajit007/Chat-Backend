@@ -7,6 +7,7 @@ import type { ChatMessage } from "../../packages/shared/dist";
 import { now } from "./utils/time";
 import { roomId } from "./utils/roomId";
 // imports
+import { registerSocketHandler } from "./sockets/index";
 import express, { Request, Response } from "express";
 import { Server, Socket } from "socket.io";
 import { createServer } from "node:http";
@@ -25,8 +26,6 @@ const PORT = process.env.PORT || 5000;
 const app = express(); //request handler
 const server = createServer(app); //real HTTP server
 const io = new Server(server); //WebSocket layer attached to that server
-
-const onlineUser = new Map<string, string>(); // username -> socket.id
 
 // middlewares
 app.use(express.json());
@@ -95,13 +94,11 @@ function dmRoom(userA: string, userB: string) {
 }
 
 io.on("connection", (socket: Socket) => {
-  // data
-  socket.data.rate = {
-    count: 0,
-    lastReset: Date.now(),
-    mutedUntil: 0,
-  };
+  registerSocketHandler(io, socket);
+  // Socket.data.rate
+
   // adding username to the connections @ sockect.on("set-username")
+  /*
   socket.on("set-username", (username: string) => {
     socket.data.username = username;
     // adding the name and the sockect id to the Map
@@ -112,6 +109,7 @@ io.on("connection", (socket: Socket) => {
       console.log("Online : ", [...onlineUser.keys()]);
     }
   });
+  */
   //creating the
   // now adding the room with unique names
 
