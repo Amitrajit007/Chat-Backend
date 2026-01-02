@@ -35,12 +35,12 @@ add ---
 
 TODO: - 
 
-2. Rate limiting / spam protection
+2. Rate limiting / spam protection done
 
-3. Typing indicators
+TODO :==========
+
+3. Typing indicators complete the \server\src\sockets\typeIndicator.ts
 
 4. Read receipts
 
 5. Auth (JWT) ← only after all above
-
-try to add the type from the cjs to ESM
