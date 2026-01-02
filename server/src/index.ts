@@ -2,6 +2,7 @@ import "dotenv/config";
 
 // imports
 import { registerSocketHandler } from "./sockets/index";
+import router from "./routes/messageHistory.route";
 import express, { Request, Response } from "express";
 import { Server, Socket } from "socket.io";
 import { createServer } from "node:http";
@@ -9,9 +10,6 @@ import cors from "cors";
 
 // for data base connection
 import { connectDb } from "./config/dbConnection";
-
-// for data base models.
-import { MessageModel } from "./model/chat";
 
 // ENVs
 const PORT = process.env.PORT || 5000;
@@ -25,6 +23,8 @@ const io = new Server(server); //WebSocket layer attached to that server
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/", router);
 
 // connecting with tha database
 async function bootstrap() {
@@ -50,10 +50,6 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/health", (req: Request, res: Response) => {
   res.send("OK");
 });
-
-// route for showing the last messages from the database
-app.get("/lastmessages");
-// dm room name
 
 io.on("connection", (socket: Socket) => {
   registerSocketHandler(io, socket);

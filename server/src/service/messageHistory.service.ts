@@ -17,16 +17,15 @@ export const messageHistory = async ({
 
     const messages = await MessageModel.find({ roomId: room })
       .sort({ createdAt: -1 })
-      .limit(msgLimit)
       .lean();
-
-    return messages.reverse();
+    const recentMessages = messages.reverse();
+    return recentMessages.splice(0, msgLimit).reverse();
   } catch (err) {
     if (err instanceof Error) {
       console.log("Error while showing last messages : ", err.message);
     } else {
       console.log("Error while showing last messages : ", err);
     }
-    throw new Error( "initaial Error");
+    throw new Error("initaial Error");
   }
 };
