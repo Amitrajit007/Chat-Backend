@@ -39,7 +39,7 @@ TODO: -
 
 TODO :==========
 
-3. Typing indicators complete the \server\src\sockets\typeIndicator.ts
+3. Typing indicators complete the \server\src\sockets\typeIndicator.ts doing it now 
 
 4. Read receipts
 

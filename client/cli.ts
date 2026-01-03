@@ -5,6 +5,14 @@ import type { ChatMessage } from "../packages/shared/dist";
 
 const socket = io("http://localhost:5000");
 
+function showTyping(username: string) {
+  process.stdout.write(`\r${username} is typing...`);
+}
+
+function clearTyping() {
+  process.stdout.write("\r\x1b[K");
+}
+
 const USERNAME = process.argv[2].toLocaleLowerCase();
 const TARGET = process.argv[3].toLocaleLowerCase();
 // connection error
@@ -27,15 +35,32 @@ socket.on("connect", () => {
   console.log(`Chatting with ${TARGET}`);
   console.log("Type messages and press Enter...\n");
 });
+socket.on("online-users", (users: string[]) => {
+  const onlineUsers = users.map((user, index) =>
+    user === USERNAME ? "You" : user,
+  );
+  console.log("online:", onlineUsers);
+});
 
+process.stdin.on("data", () => {
+  socket.emit("typing");
+});
 cli.on("line", (line: string) => {
-  const text = line.trim();
+  const text = line.trimEnd();
   if (!text) return;
 
   socket.emit("dm-message", text);
 });
 
+socket.on("typing", (userName: string) => {
+  showTyping(userName);
+  setTimeout(() => {
+    clearTyping();
+  }, 1000);
+});
+
 socket.on("dm-message", (message: ChatMessage) => {
+  clearTyping();
   const sender = message.from === USERNAME ? "You" : message.from;
   console.log(`${sender} : ${message.text}          ${message.time} `);
 });
