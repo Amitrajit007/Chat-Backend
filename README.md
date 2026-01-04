@@ -28,7 +28,8 @@ A real-time chat application backend built with **Socket.IO**, **Express**, **Ty
 - **Rate Limiting**: Prevent spam with automatic message throttling (3 messages/minute)
 - **Content Moderation**: Automatic filtering of inappropriate content
 - **Message History API**: Retrieve past messages via REST endpoint
-
+- **Typing Indicators**: Real-time visual feedback when a user is composing a message
+- **Read Receipts**: Track and update the delivery and read status of messages
 - **TypeScript**: Full type safety across client, server, and shared types
 - **CLI Client**: Command-line interface for testing and demonstration
 
@@ -100,7 +101,6 @@ Client A
 .
 ├── README.md
 ├── client
-│   ├── cli.js
 │   ├── cli.ts
 │   ├── package-lock.json
 │   ├── package.json
@@ -122,42 +122,40 @@ Client A
 │       │       ├── historyMessage.ts
 │       │       └── socket.ts
 │       └── tsconfig.json
-├── server
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── src
-│   │   ├── config
-│   │   │   └── dbConnection.ts
-│   │   ├── controller
-│   │   │   └── msgHistory.controller.ts
-│   │   ├── index.ts
-│   │   ├── model
-│   │   │   └── chat.ts
-│   │   ├── routes
-│   │   │   └── messageHistory.route.ts
-│   │   ├── service
-│   │   │   └── messageHistory.service.ts
-│   │   ├── sockets
-│   │   │   ├── disconnect.ts
-│   │   │   ├── dmMessages.ts
-│   │   │   ├── index.ts
-│   │   │   ├── presence.state.ts
-│   │   │   ├── setUsername.ts
-│   │   │   ├── startDm.ts
-│   │   │   └── typeIndicator.ts
-│   │   ├── tsconfig.json
-│   │   └── utils
-│   │       ├── roomId.ts
-│   │       └── time.ts
-│   └── test
-│       ├── client-test-1.ts
-│       ├── client-test-2.ts
-│       ├── client-test-3.ts
-│       └── client-test-4.ts
-└── update
-    └── update.md
-```
-
+└── server
+    ├── package-lock.json
+    ├── package.json
+    ├── src
+    │   ├── config
+    │   │   └── dbConnection.ts
+    │   ├── controller
+    │   │   └── msgHistory.controller.ts
+    │   ├── index.ts
+    │   ├── model
+    │   │   └── chat.ts
+    │   ├── routes
+    │   │   └── messageHistory.route.ts
+    │   ├── service
+    │   │   └── messageHistory.service.ts
+    │   ├── sockets
+    │   │   ├── deliveryMsg.ts
+    │   │   ├── disconnect.ts
+    │   │   ├── dmMessages.ts
+    │   │   ├── index.ts
+    │   │   ├── presence.state.ts
+    │   │   ├── readMsg.ts
+    │   │   ├── setUsername.ts
+    │   │   ├── startDm.ts
+    │   │   └── typeIndicator.ts
+    │   ├── tsconfig.json
+    │   └── utils
+    │       ├── roomId.ts
+    │       └── time.ts
+    └── test
+        ├── client-test-1.ts
+        ├── client-test-2.ts
+        ├── client-test-3.ts
+        └── client-test-4.ts
 ---
 
 ##  Getting Started
@@ -249,11 +247,12 @@ Atlas_URI=mongodb://localhost:27017/chat-app
 
 ```typescript
 type ChatMessage = {
-  roomId: string;    // Sorted usernames: "alice,bob"
-  id: string;        // Socket ID
-  from: string;      // Sender username
-  text: string;      // Message content
-  time: string;      // Formatted timestamp
+  roomId: string; // Sorted usernames (e.g., "alice,bob")
+    id: string; //   Message ID
+    from: string; // Sender username
+    text: string; // Message content
+    to: string; // Recipient username
+    time: string; // Formatted timestamp
 }
 ```
 
@@ -331,13 +330,14 @@ curl "http://localhost:5000/lastmessages?from=alice&to=bob&limit=10"
 
 ```javascript
 {
-  roomId: String,      // Sorted usernames (e.g., "alice,bob")
-  id: String,          // Socket ID of sender
-  from: String,        // Sender username
-  text: String,        // Message content
-  to: String,          // Recipient username
-  time: String,        // Formatted timestamp
+  roomId: String,   // Sorted usernames (e.g., "alice,bob")
+  id: String,       // Message ID
+  from: String,     // Sender username
+  text: String,     // Message content
+  to: String,       // Recipient username
+  time: String,     // Formatted timestamp
 }
+
 ```
 
 **Indexes:**
@@ -353,19 +353,13 @@ curl "http://localhost:5000/lastmessages?from=alice&to=bob&limit=10"
 ```bash
 Listening at 5000
 MongoDB connected successfully
-Online :  [ 'alice' ]
-
-alice is connected in room : alice,bob
-
-Online :  [ 'alice', 'bob' ]
-
-bob is connected in room : alice,bob
-Client disconnect with id:  z9WzkUGusKb34sPoAAAB
-
-Online :  [ 'bob' ]
-
-Client disconnect with id:  nC_ruxh2t6tDAIWrAAAD
-
+Online :  [ 'alex' ]
+alex is connected in romm : dm:alexjohn
+Online :  [ 'alex', 'john' ]
+john is connected in romm : dm:alexjohn
+Client disconnect with id:  LkSQBjXklUABPJPaAAAD
+Online :  [ 'alex' ]
+Client disconnect with id:  S1JIjaZJXQerzz4PAAAJ
 No one is Online
 ```
 
@@ -374,14 +368,17 @@ No one is Online
 Chatting with alex
 Type messages and press Enter...
 
+online: [ 'alex', 'You' ]
 online: [ 'You' ]
 online: [ 'You', 'alex' ]
-> Hello Alex
-You : Hello Alex          4/1/2026, 2:22:38 am
-alex : Hey John          4/1/2026, 2:22:50 am
-> How are you ?
-You : How are you ?          4/1/2026, 2:23:07 am
-alex : I'm good , thanks          4/1/2026, 2:23:36 am
+alex : hii John    5/1/2026, 3:26:01 am
+alex : How are you  ?    5/1/2026, 3:26:12 am
+> Im fine, thanks 
+You : Im fine, thanks    5/1/2026, 3:26:38 am
+[READ] b9a30bdc-aadc-46b5-ab46-60cb500a8889
+[DELIVERED] b9a30bdc-aadc-46b5-ab46-60cb500a8889
+alex : Cool 👍    5/1/2026, 3:27:01 am
+
 Caught Ctrl+C
 Closing connection...
 Disconnected
@@ -389,17 +386,25 @@ Disconnected
 
 **Alex's Console:**
 ```bash
-Chatting with alex
+Chatting with john
 Type messages and press Enter...
 
+online: [ 'john', 'You' ]
+> hii John
+You : hii John    5/1/2026, 3:26:01 am
+[DELIVERED] b2a328e8-0034-4635-a3ee-c79db5016afd
+[READ] b2a328e8-0034-4635-a3ee-c79db5016afd
+> How are you  ?
+You : How are you  ?    5/1/2026, 3:26:12 am
+[DELIVERED] 5d54095b-2864-4e5c-837f-533900a64912
+[READ] 5d54095b-2864-4e5c-837f-533900a64912J
+John : Im fine, thanks    5/1/2026, 3:26:38 am
+> Cool 👍
+You : Cool 👍    5/1/2026, 3:27:01 am
+[DELIVERED] e587c3a8-2041-46e3-8676-b37df243faf8
+[READ] e587c3a8-2041-46e3-8676-b37df243faf8
 online: [ 'You' ]
-online: [ 'You', 'alex' ]
-> Hello Alex
-You : Hello Alex          4/1/2026, 2:22:38 am
-alex : Hey John          4/1/2026, 2:22:50 am
-> How are you ?
-You : How are you ?          4/1/2026, 2:23:07 am
-alex : I'm good , thanks          4/1/2026, 2:23:36 am
+
 Caught Ctrl+C
 Closing connection...
 Disconnected

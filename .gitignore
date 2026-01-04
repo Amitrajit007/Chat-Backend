@@ -3,3 +3,4 @@ node_modules
 dist/
 testing.md
 test.ts
+update.md
