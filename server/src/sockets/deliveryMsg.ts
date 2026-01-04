@@ -8,6 +8,6 @@ export function registerDelivered(io: Server, socket: Socket) {
       { $set: { deliveredAt: new Date() } },
     );
 
-    io.to(from).emit("delivered", { messageId });
+    io.to(from).emit("delivered", messageId);
   });
 }

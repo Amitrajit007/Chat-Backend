@@ -8,6 +8,6 @@ export function registerRead(io: Server, socket: Socket) {
       { $set: { readAt: new Date() } },
     );
 
-    io.to(from).emit("read", { messageId });
+    io.to(from).emit("read", messageId);
   });
 }

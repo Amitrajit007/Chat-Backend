@@ -28,6 +28,7 @@ A real-time chat application backend built with **Socket.IO**, **Express**, **Ty
 - **Rate Limiting**: Prevent spam with automatic message throttling (3 messages/minute)
 - **Content Moderation**: Automatic filtering of inappropriate content
 - **Message History API**: Retrieve past messages via REST endpoint
+
 - **TypeScript**: Full type safety across client, server, and shared types
 - **CLI Client**: Command-line interface for testing and demonstration
 
