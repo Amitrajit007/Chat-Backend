@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 
 function dmRoom(userA: string, userB: string) {
-  return `dm:${[userA, userB].sort().join("_")}`;
+  return `dm:${[userA, userB].sort().join("")}`;
 }
 
 export function registerStartDm(io: Server, socket: Socket) {

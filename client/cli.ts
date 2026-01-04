@@ -59,10 +59,28 @@ socket.on("typing", (userName: string) => {
   }, 1000);
 });
 
+socket.on("delivered", (messageId) => {
+  console.log("[DELIVERED]", messageId);
+});
+
+socket.on("read", (messageId) => {
+  console.log("[READ]", messageId);
+});
 socket.on("dm-message", (message: ChatMessage) => {
   clearTyping();
+  if (message.from !== USERNAME) {
+    socket.emit("message-delivered", {
+      messageId: message.id,
+      from: message.from,
+    });
+
+    socket.emit("message-read", {
+      messageId: message.id,
+      from: message.from,
+    });
+  }
   const sender = message.from === USERNAME ? "You" : message.from;
-  console.log(`${sender} : ${message.text}          ${message.time} `);
+  console.log(`${sender} : ${message.text}    ${message.time}`);
 });
 
 // handle errors

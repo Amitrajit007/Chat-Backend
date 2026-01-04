@@ -3,6 +3,10 @@ import mongoose, { Schema } from "mongoose";
 import { ChatMessage } from "../../../packages/shared/dist";
 
 const msgSchema = new Schema({
+  _id: {
+    type: String,
+    required: true,
+  },
   roomId: {
     type: String,
     required: true,
@@ -26,6 +30,14 @@ const msgSchema = new Schema({
   time: {
     type: String,
     required: true,
+  },
+  deliveredAt: {
+    type: Date,
+    required: false,
+  },
+  readAt: {
+    type: Date,
+    required: false,
   },
 });
 

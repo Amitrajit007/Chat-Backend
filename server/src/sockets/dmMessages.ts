@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-
+import crypto from "node:crypto";
 import { MessageModel } from "../model/chat";
 
 import { ChatMessage } from "../../../packages/shared/dist";
@@ -38,9 +38,10 @@ export function registerDmMessage(io: Server, socket: Socket) {
       const text: string = "Message is not accepted";
       const message: ChatMessage = {
         roomId: roomId(socket.data.username, socket.data.target),
-        id: socket.id,
+        id: crypto.randomUUID(),
         from: socket.data.username,
         text,
+        to: socket.data.target,
         time: now(),
       };
       io.to(room).emit("dm-error", message);
@@ -51,21 +52,13 @@ export function registerDmMessage(io: Server, socket: Socket) {
 
     const message: ChatMessage = {
       roomId: roomId(socket.data.username, socket.data.target),
-      id: socket.id,
-      from: socket.data.username ?? "Anonymous",
-      text,
-      time: now(),
-    };
-
-    // sending the msg to all including the sender
-    io.to(room).emit("dm-message", message);
-    await MessageModel.create({
-      roomId: roomId(socket.data.username, socket.data.target),
-      id: socket.id,
+      id: crypto.randomUUID(),
       from: socket.data.username ?? "Anonymous",
       text,
       to: socket.data.target,
       time: now(),
-    });
+    };
+
+    io.to(room).emit("dm-message", message);
   });
 }

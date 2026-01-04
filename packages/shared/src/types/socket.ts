@@ -3,5 +3,6 @@ export type ChatMessage = {
   id: string;
   from: string;
   text: string;
+  to: string;
   time: string;
 };

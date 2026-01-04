@@ -96,47 +96,65 @@ Client A
 ## Project Structure
 
 ```
-Chat-backend/
-├── client/                    # CLI client for testing
-│   ├── cli.ts                # Main CLI application
-│   ├── package.json
-│   └── tsconfig.json
-│
-├── packages/shared/          # Shared TypeScript types
-│   ├── src/
-│   │   └── types/
-│   │       └── socket.ts     # ChatMessage type definition
-│   ├── dist/                 # Compiled types
-│   └── tsconfig.json
-│
-├── server/                   # Backend server
-│   ├── src/
-│   │   ├── config/
-│   │   │   └── dbConnection.ts      # MongoDB connection
-│   │   ├── controller/
-│   │   │   └── msgHistory.controller.ts  # Message history controller
-│   │   ├── model/
-│   │   │   └── chat.ts              # Mongoose message schema
-│   │   ├── routes/
-│   │   │   └── messageHistory.route.ts   # REST routes
-│   │   ├── service/
-│   │   │   └── messageHistory.service.ts # Business logic
-│   │   ├── sockets/
-│   │   │   ├── index.ts             # Socket handler registration
-│   │   │   ├── setUsername.ts       # Username setup
-│   │   │   ├── startDm.ts           # DM room creation
-│   │   │   ├── dmMessages.ts        # Message handling
-│   │   │   ├── disconnect.ts        # Disconnect handling
-│   │   │   └── presence.state.ts    # Online users state
-│   │   ├── utils/
-│   │   │   ├── roomId.ts            # Room ID generation
-│   │   │   └── time.ts              # Timestamp formatting
-│   │   └── index.ts                 # Server entry point
-│   ├── test/                        # Test clients
-│   ├── package.json
-│   └── tsconfig.json
-│
-└── README.md
+.
+├── README.md
+├── client
+│   ├── cli.js
+│   ├── cli.ts
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── test.ts
+│   ├── tsconfig.json
+│   └── utils
+├── packages
+│   ├── package-lock.json
+│   └── shared
+│       ├── dist
+│       │   ├── index.d.ts
+│       │   └── types
+│       │       ├── historyMessage.d.ts
+│       │       └── socket.d.ts
+│       ├── package.json
+│       ├── src
+│       │   ├── index.ts
+│       │   └── types
+│       │       ├── historyMessage.ts
+│       │       └── socket.ts
+│       └── tsconfig.json
+├── server
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── src
+│   │   ├── config
+│   │   │   └── dbConnection.ts
+│   │   ├── controller
+│   │   │   └── msgHistory.controller.ts
+│   │   ├── index.ts
+│   │   ├── model
+│   │   │   └── chat.ts
+│   │   ├── routes
+│   │   │   └── messageHistory.route.ts
+│   │   ├── service
+│   │   │   └── messageHistory.service.ts
+│   │   ├── sockets
+│   │   │   ├── disconnect.ts
+│   │   │   ├── dmMessages.ts
+│   │   │   ├── index.ts
+│   │   │   ├── presence.state.ts
+│   │   │   ├── setUsername.ts
+│   │   │   ├── startDm.ts
+│   │   │   └── typeIndicator.ts
+│   │   ├── tsconfig.json
+│   │   └── utils
+│   │       ├── roomId.ts
+│   │       └── time.ts
+│   └── test
+│       ├── client-test-1.ts
+│       ├── client-test-2.ts
+│       ├── client-test-3.ts
+│       └── client-test-4.ts
+└── update
+    └── update.md
 ```
 
 ---

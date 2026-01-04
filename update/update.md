@@ -37,9 +37,10 @@ TODO: -
 
 2. Rate limiting / spam protection done
 
-TODO :==========
 
 3. Typing indicators complete the \server\src\sockets\typeIndicator.ts doing it now 
+
+TODO :==========
 
 4. Read receipts
 
