@@ -156,7 +156,7 @@ Client A
         ├── client-test-2.ts
         ├── client-test-3.ts
         └── client-test-4.ts
----
+```
 
 ##  Getting Started
 
@@ -427,7 +427,7 @@ npm run client-test-2
 
 ### Rate Limiting
 
-- **Limit:** 3 messages per minute per user
+- **Limit:** 5 messages per minute per user
 - **Penalty:** 5-second mute on exceeding limit
 - **Error Message:** `"Too many messages. Muted for 5s."`
 

@@ -23,7 +23,7 @@ export function registerDmMessage(io: Server, socket: Socket) {
 
     rate.count++;
 
-    if (rate.count > 3) {
+    if (rate.count > 5) {
       rate.mutedUntil = NOW + 5000; // 5 sec mute
       socket.emit("dm-error", "Too many messages. Muted for 5s.");
       return;
