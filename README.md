@@ -269,40 +269,47 @@ Retrieve past messages between two users.
 **Query Parameters:**
 - `from` (string, required) - First username
 - `to` (string, required) - Second username
-- `limit` (number, optional) - Number of messages to retrieve (default: 50)
+- `limit` (number, optional) - Number of messages to retrieve (default: 10 and max: 25)
 
 **Example Request:**
 ```bash
-curl "http://localhost:5000/lastmessages?from=alice&to=bob&limit=10"
+curl "http://localhost:5000/lastmessages?from=alex&to=john&limit=3"
 ```
 
 **Example Response:**
 ```json
-{
-  "messages": [
-    {
-      "_id": "69504c825064e368c4dae44a",
-      "roomId": "alice,bob",
-      "id": "jxKCSoWK6t4p8vojAAAD",
-      "from": "bob",
-      "text": "Hello Alice!",
-      "to": "alice",
-      "time": "03/01/2026, 3:15:22 am",
-      "__v": 0
-    },
-    {
-      "_id": "69504c815064e368c4dae446",
-      "roomId": "alice,bob",
-      "id": "t9iOkd-d9NTVirfnAAAB",
-      "from": "alice",
-      "text": "Hi Bob!",
-      "to": "bob",
-      "time": "03/01/2026, 3:15:18 am",
-      "__v": 0
-    }
-  ]
-}
-
+[
+  {
+    "_id": "45ec5a84-4d0f-4dc4-ae88-f8fe03fe7941",
+    "roomId": "alex,john",
+    "id": "45ec5a84-4d0f-4dc4-ae88-f8fe03fe7941",
+    "from": "alex",
+    "text": "i love peace",
+    "to": "john",
+    "time": "4/1/2026, 10:07:27 pm",
+    "__v": 0
+  },
+  {
+    "_id": "2cac0dd7-ff7e-4541-94bc-9d2a6659bb16",
+    "roomId": "alex,john",
+    "id": "2cac0dd7-ff7e-4541-94bc-9d2a6659bb16",
+    "from": "john",
+    "text": "Hello alex",
+    "to": "alex",
+    "time": "5/1/2026, 1:09:34 am",
+    "__v": 0
+  },
+  {
+    "_id": "70a45670-9f03-4e1c-b29f-651964ed53d6",
+    "roomId": "alex,john",
+    "id": "70a45670-9f03-4e1c-b29f-651964ed53d6",
+    "from": "alex",
+    "text": "hii",
+    "to": "john",
+    "time": "5/1/2026, 1:09:54 am",
+    "__v": 0
+  }
+]
 ```
 
 ### Health Check

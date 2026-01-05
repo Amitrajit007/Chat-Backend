@@ -9,4 +9,4 @@ export const msgHistoryController = async (req: Request, res: Response) => {
   res.status(200).json(data);
 };
 
-// res.status(400).json({ error: "from and to are required" });
+
