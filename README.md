@@ -1,6 +1,7 @@
 # Chat Backend
 
-A real-time chat application backend built with **Socket.IO**, **Express**, **TypeScript**, and **MongoDB**. This project provides a scalable WebSocket-based messaging system with direct messaging (DM) capabilities, message persistence, rate limiting, and content moderation.
+A WebSocket-driven chat backend using **Socket.IO**, **Express**, **TypeScript**, **MongoDB**, and **Redis**.  
+Designed to handle real-time direct messaging with persistent storage, rate limiting, content moderation, and cached message history.
 
 ---
 
@@ -28,6 +29,7 @@ A real-time chat application backend built with **Socket.IO**, **Express**, **Ty
 - **Rate Limiting**: Prevent spam with automatic message throttling (3 messages/minute)
 - **Content Moderation**: Automatic filtering of inappropriate content
 - **Message History API**: Retrieve past messages via REST endpoint
+- **Redis-backed Caching**: Reduce repeated MongoDB reads for chat history queries
 - **Typing Indicators**: Real-time visual feedback when a user is composing a message
 - **Read Receipts**: Track and update the delivery and read status of messages
 - **TypeScript**: Full type safety across client, server, and shared types
@@ -81,6 +83,7 @@ Client A
 - **Node.js** with **TypeScript**
 - **Express** - HTTP server and REST API
 - **Socket.IO** - WebSocket communication
+- **Redis** - query caching
 - **MongoDB** with **Mongoose(ORM)** - Message persistence
 - **dotenv** - Environment configuration
 - **CORS** - Cross-origin resource sharing
